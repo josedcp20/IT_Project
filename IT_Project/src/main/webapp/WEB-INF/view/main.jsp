@@ -1,4 +1,25 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ut egestas odio. Curabitur tincidunt, dolor ut venenatis dictum, sapien sapien fermentum arcu, a finibus nisl mauris vel leo. Quisque ex nibh, consectetur ac nibh nec, rhoncus maximus orci. Ut sed dolor vulputate, scelerisque odio id, tincidunt nisl. Praesent luctus tortor ut lorem faucibus tristique. Maecenas dapibus mattis orci. Vivamus finibus consectetur egestas. Etiam non urna ligula. Etiam scelerisque dui nec justo posuere, nec feugiat est pharetra.
+<%@ page import="pk.wieik.it_project.dto.UserDTO" %>
+<%
+    UserDTO mainUser = (UserDTO) session.getAttribute("user");
+%>
 
-Proin luctus turpis eros. Integer mi elit, porta dapibus urna sed, elementum sollicitudin dolor. Sed consectetur tempor nulla, nec tincidunt massa. Integer molestie auctor nisl vel ultrices. Ut tincidunt, neque et lacinia placerat, turpis sem laoreet ipsum, in sollicitudin urna arcu id nibh. Praesent fringilla leo ante, a luctus massa euismod in. Maecenas sit amet tincidunt magna. Nulla vulputate, lectus quis accumsan congue, justo diam pretium massa, eget facilisis ante nulla lobortis ligula. Nulla facilisi.
+<h2>Welcome to the Comic Book Database</h2>
+
+<p>This system lets you browse a curated catalog of comic books, search by title,
+series, artist or publisher, and keep track of your favorites.</p>
+
+<div class="card">
+    <h3>Get started</h3>
+    <ul>
+        <li>Browse the full catalog in <a href="comics">Comics catalog</a>.</li>
+        <% if (mainUser == null) { %>
+            <li>Log in or <a href="register.jsp">create an account</a> to save your favorites.</li>
+        <% } else { %>
+            <li>Visit <a href="?page=settings">My favorites</a> to manage your saved comics.</li>
+        <% } %>
+        <% if (mainUser != null && mainUser.getPrivileges() == 2) { %>
+            <li>As an administrator, you can manage users and add new comics.</li>
+        <% } %>
+    </ul>
+</div>

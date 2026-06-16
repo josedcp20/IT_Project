@@ -3,29 +3,46 @@
 <%@ page import="pk.wieik.it_project.dao.UserDAO" %>
 <%@ page import="java.util.List" %>
 <%
-    UserDTO currentUser = (UserDTO) session.getAttribute("user");
-    if (currentUser == null || currentUser.getPrivileges() != 2) {
+    UserDTO adminUser = (UserDTO) session.getAttribute("user");
+    if (adminUser == null || adminUser.getPrivileges() != 2) {
 %>
-<p>Access denied.</p>
+    <div class="alert alert-error">Access denied.</div>
 <%
         return;
     }
-    List<UserDTO> users = new UserDAO().getAllUsers();
+    List<UserDTO> adminList = new UserDAO().getAllUsers();
 %>
 
-<h3>User administration</h3>
+<h2>User administration</h2>
 
 <form action="DG?action=administration" method="post">
-    Background color:
-    <input type="text" name="backgroundColor" value="${applicationScope.backgroundColor}"/><br/><br/>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Role</th>
+        </tr>
+        <% for (UserDTO u : adminList) { %>
+            <tr>
+                <td><%= u.getId() %></td>
+                <td><b><%= u.getUser() %></b></td>
+                <td>
+                    <label style="margin-right:0.6rem;">
+                        <input type="radio" name="priv_<%= u.getId() %>" value="0"
+                            <%= u.getPrivileges() == 0 ? "checked" : "" %>> Blocked
+                    </label>
+                    <label style="margin-right:0.6rem;">
+                        <input type="radio" name="priv_<%= u.getId() %>" value="1"
+                            <%= u.getPrivileges() == 1 ? "checked" : "" %>> User
+                    </label>
+                    <label>
+                        <input type="radio" name="priv_<%= u.getId() %>" value="2"
+                            <%= u.getPrivileges() == 2 ? "checked" : "" %>> Admin
+                    </label>
+                </td>
+            </tr>
+        <% } %>
+    </table>
 
-    <% for (UserDTO u : users) { %>
-    <b><%= u.getUser() %></b> (id=<%= u.getId() %>):
-    <input type="radio" name="priv_<%= u.getId() %>" value="0" <%= u.getPrivileges() == 0 ? "checked" : "" %>> Blocked
-    <input type="radio" name="priv_<%= u.getId() %>" value="1" <%= u.getPrivileges() == 1 ? "checked" : "" %>> User
-    <input type="radio" name="priv_<%= u.getId() %>" value="2" <%= u.getPrivileges() == 2 ? "checked" : "" %>> Admin
-    <br/>
-    <% } %>
-
-    <br/><input type="submit" value="Save changes">
+    <p><input type="submit" value="Save changes"/></p>
 </form>

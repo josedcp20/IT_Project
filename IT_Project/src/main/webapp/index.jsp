@@ -7,22 +7,21 @@
     int privileges = (user != null) ? user.getPrivileges() : -1;
 
     String Page = request.getParameter("page");
-    String Subpages = "main;quadratic;third";
+    String Subpages = "main";
     if (privileges > 0) Subpages += ";settings";
     if (privileges == 2) Subpages += ";administration";
     Page = Tools.parsePage(Page, Subpages);
 %>
 
 <!DOCTYPE html>
-<html style="background-color: ${(empty applicationScope.backgroundColor) ?
-                                'white' : applicationScope.backgroundColor}">
+<html>
 <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>IT-Lab6</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Comic Book Database</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
-    <script type="text/javascript" src="script.js"></script>
 </head>
-<body onload="functions(); clock(); setInterval(clock, 1000);">
+<body>
 <div id="container">
     <div id="header">
         <jsp:include page="/WEB-INF/view/header.jsp"/>

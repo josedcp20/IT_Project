@@ -1,42 +1,34 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Jose Dcp
-  Date: 16/06/2026
-  Time: 19:22
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Log in</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-<div id="container">
-    <h2>Login</h2>
+<div class="auth-box">
+    <h2>Log in</h2>
 
     <% if ("1".equals(request.getParameter("registered"))) { %>
-    <p style="color:green;">Account created. You can log in now.</p>
+        <div class="alert alert-success">Account created. You can log in now.</div>
     <% } %>
-
-    <% String error = request.getParameter("error"); %>
-    <% if ("1".equals(error)) { %>
-    <p style="color:red;">Invalid username or password.</p>
+    <% if ("1".equals(request.getParameter("error"))) { %>
+        <div class="alert alert-error">Invalid username or password.</div>
     <% } %>
 
     <form action="LoginServlet" method="post">
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+        <label>Username</label>
+        <input type="text" name="username" required>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+        <label>Password</label>
+        <input type="password" name="password" required>
 
-        <input type="submit" value="Login">
+        <input type="submit" value="Log in">
     </form>
 
     <p>Don't have an account? <a href="register.jsp">Register here</a>.</p>
-    <p><a href="index.jsp?page=main">Back to main</a></p>
+    <p><a href="index.jsp?page=main">Back to home</a></p>
 </div>
 </body>
 </html>

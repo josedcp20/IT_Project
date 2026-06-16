@@ -1,2 +1,2 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-&copy; 2026 DG
+&copy; 2026 Comic Book Database &middot; Internet Technologies Project

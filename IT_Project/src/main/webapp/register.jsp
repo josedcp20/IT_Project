@@ -7,26 +7,32 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-<div id="container">
-    <h2>Register new user</h2>
+<div class="auth-box">
+    <h2>Create account</h2>
 
     <% String error = request.getParameter("error"); %>
     <% if ("invalid".equals(error)) { %>
-    <p style="color:red;">Invalid input or passwords don't match.</p>
+        <div class="alert alert-error">Invalid input or passwords don't match.</div>
     <% } else if ("exists".equals(error)) { %>
-    <p style="color:red;">That username is already taken.</p>
+        <div class="alert alert-error">That username is already taken.</div>
     <% } else if ("db".equals(error)) { %>
-    <p style="color:red;">Database error. Try again.</p>
+        <div class="alert alert-error">Database error. Try again.</div>
     <% } %>
 
     <form action="register" method="post">
-        Username: <input type="text" name="username" required/><br/><br/>
-        Password: <input type="password" name="password" required/><br/><br/>
-        Confirm: <input type="password" name="confirm" required/><br/><br/>
+        <label>Username</label>
+        <input type="text" name="username" required/>
+
+        <label>Password</label>
+        <input type="password" name="password" required/>
+
+        <label>Confirm password</label>
+        <input type="password" name="confirm" required/>
+
         <input type="submit" value="Register"/>
     </form>
 
-    <p><a href="login.jsp">Back to login</a></p>
+    <p>Already have an account? <a href="login.jsp">Log in</a></p>
 </div>
 </body>
 </html>
