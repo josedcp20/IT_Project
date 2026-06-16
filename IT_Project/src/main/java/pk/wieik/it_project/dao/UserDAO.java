@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 public class UserDAO {
 
     /**
@@ -162,27 +163,26 @@ public class UserDAO {
         return addUser(u);
     }
 
+    /**
+     * Devuelve el hash BCrypt almacenado para un usuario activo (privileges > 0).
+     * Devuelve null si no existe o está bloqueado.
+     */
     public String getHashedPassword(String username) {
-        String sql = "SELECT password FROM users WHERE user = ?";
+        String sql = "SELECT password FROM users WHERE user = ? AND privileges > 0";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, username);
-
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("password");
-                }
+                if (rs.next()) return rs.getString("password");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Devuelve null si el usuario no existe o hay error
+        return null;
     }
 
     /**
      * Helper privado: convierte una fila del ResultSet en un UserDTO.
-     * Evita duplicar código en findByUsername / getAllUsers.
      */
     private UserDTO mapRow(ResultSet rs) throws SQLException {
         return new UserDTO(

@@ -3,6 +3,7 @@ package pk.wieik.it_project.controller;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import org.mindrot.jbcrypt.BCrypt;
 import pk.wieik.it_project.dao.*;
 import pk.wieik.it_project.dto.*;
 import pk.wieik.it_project.database.DatabaseManager;
@@ -21,11 +22,11 @@ public class UserInitializer  implements ServletContextListener {
 
         UserDAO userDAO = new UserDAO();
 
-        // Solo inserta usuarios de prueba si la BD está vacía
+        // Solo inserta usuarios de prueba si la BD está vacía (con contraseñas hasheadas con BCrypt)
         if (userDAO.countUsers() == 0) {
-            userDAO.addUser(new UserDTO("user1", "user1", 1));
-            userDAO.addUser(new UserDTO("user2", "user2", 1));
-            userDAO.addUser(new UserDTO("admin", "admin", 2));
+            userDAO.addUser(new UserDTO("user1", BCrypt.hashpw("user1", BCrypt.gensalt(12)), 1));
+            userDAO.addUser(new UserDTO("user2", BCrypt.hashpw("user2", BCrypt.gensalt(12)), 1));
+            userDAO.addUser(new UserDTO("admin", BCrypt.hashpw("admin", BCrypt.gensalt(12)), 2));
             System.out.println("[UserInitializer] Initial users inserted correctly.");
         }
 

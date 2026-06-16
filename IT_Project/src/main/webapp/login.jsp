@@ -15,7 +15,7 @@
 <body>
 <div id="container">
     <h2>Login</h2>
-    
+
     <% if ("1".equals(request.getParameter("registered"))) { %>
     <p style="color:green;">Account created. You can log in now.</p>
     <% } %>
