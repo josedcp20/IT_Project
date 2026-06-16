@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="pk.wieik.it_project.dto.ComicDTO" %>
+<%@ page import="pk.wieik.it_project.dto.UserDTO" %>
+<%@ page import="pk.wieik.it_project.dao.SettingsDAO" %>
 <%
     ComicDTO c = (ComicDTO) request.getAttribute("comic");
+    UserDTO detailUser = (UserDTO) session.getAttribute("user");
+    boolean detailLogged = detailUser != null && detailUser.getPrivileges() > 0;
+    boolean alreadyFav = detailLogged && new SettingsDAO().isFavorite(detailUser.getId(), c.getId());
 %>
 <!DOCTYPE html>
 <html>
@@ -22,6 +27,15 @@
         <div id="content">
             <p><a href="comics">&laquo; Back to catalog</a></p>
             <h2><%= c.getTitle() %></h2>
+
+            <% if (detailLogged) { %>
+                <form action="comics" method="post" style="margin-bottom:1rem;">
+                    <input type="hidden" name="action" value="<%= alreadyFav ? "removeFav" : "addFav" %>"/>
+                    <input type="hidden" name="comicId" value="<%= c.getId() %>"/>
+                    <input type="hidden" name="from" value="detail"/>
+                    <input type="submit" value="<%= alreadyFav ? "Remove from favorites" : "Add to favorites" %>"/>
+                </form>
+            <% } %>
 
             <div class="card">
                 <p><b>Series:</b> <%= c.getSeries() %></p>

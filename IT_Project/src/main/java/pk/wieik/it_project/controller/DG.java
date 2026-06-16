@@ -38,10 +38,6 @@ public class DG extends HttpServlet {
             session.invalidate();
         } else if ("administration".equals(action)) {
             if (user != null && user.getPrivileges() == 2) {
-                String backgroundColor = request.getParameter("backgroundColor");
-                if (backgroundColor == null) backgroundColor = "";
-                getServletContext().setAttribute("backgroundColor", backgroundColor);
-
                 List<UserDTO> all = userDAO.getAllUsers();
                 for (UserDTO u : all) {
                     String privParam = request.getParameter("priv_" + u.getId());
@@ -54,6 +50,17 @@ public class DG extends HttpServlet {
                         } catch (NumberFormatException ignored) {}
                     }
                 }
+                redirect = request.getContextPath() + "/index.jsp?page=administration";
+            }
+        } else if ("deleteUser".equals(action)) {
+            if (user != null && user.getPrivileges() == 2) {
+                try {
+                    int targetId = Integer.parseInt(request.getParameter("userId"));
+                    // Evita que el admin se borre a sí mismo
+                    if (targetId != user.getId()) {
+                        userDAO.deleteUser(targetId);
+                    }
+                } catch (NumberFormatException ignored) {}
                 redirect = request.getContextPath() + "/index.jsp?page=administration";
             }
         }

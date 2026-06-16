@@ -12,6 +12,7 @@ import java.util.List;
 @WebServlet("/comics")
 public class ComicServlet extends HttpServlet {
     private final ComicDAO comicDAO = new ComicDAO();
+    private final SettingsDAO settingsDAO = new SettingsDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,13 +35,26 @@ public class ComicServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        String action = request.getParameter("action");
+        if (action == null) action = "";
+
+        // Acciones de favoritos: requieren login (no necesariamente admin)
+        if ("addFav".equals(action) || "removeFav".equals(action)) {
+            UserDTO loggedUser = getLoggedUser(request);
+            if (loggedUser == null) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+                return;
+            }
+            if ("addFav".equals(action)) handleAddFavorite(request, response, loggedUser);
+            else handleRemoveFavorite(request, response, loggedUser);
+            return;
+        }
+
+        // Resto de acciones: solo admin
         if (!isAdmin(request)) {
             response.sendRedirect(request.getContextPath() + "/comics");
             return;
         }
-
-        String action = request.getParameter("action");
-        if (action == null) action = "";
 
         switch (action) {
             case "add" -> handleAdd(request, response);
@@ -48,6 +62,45 @@ public class ComicServlet extends HttpServlet {
             case "delete" -> handleDelete(request, response);
             default -> response.sendRedirect(request.getContextPath() + "/comics");
         }
+    }
+
+    private void handleAddFavorite(HttpServletRequest request, HttpServletResponse response, UserDTO user)
+            throws IOException {
+        int comicId = parseInt(request.getParameter("comicId"), -1);
+        if (comicId > 0 && !settingsDAO.isFavorite(user.getId(), comicId)) {
+            ComicDTO c = comicDAO.findById(comicId);
+            if (c != null) {
+                SettingsDTO s = new SettingsDTO(user.getId(), c.getTitle(), c.getSeries(), c.getId());
+                settingsDAO.addSettings(s);
+            }
+        }
+        String from = request.getParameter("from");
+        if ("detail".equals(from)) {
+            response.sendRedirect(request.getContextPath() + "/comics?action=detail&id=" + comicId);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/index.jsp?page=settings");
+        }
+    }
+
+    private void handleRemoveFavorite(HttpServletRequest request, HttpServletResponse response, UserDTO user)
+            throws IOException {
+        int comicId = parseInt(request.getParameter("comicId"), -1);
+        if (comicId > 0) {
+            settingsDAO.removeFavorite(user.getId(), comicId);
+        }
+        String from = request.getParameter("from");
+        if ("detail".equals(from)) {
+            response.sendRedirect(request.getContextPath() + "/comics?action=detail&id=" + comicId);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/index.jsp?page=settings");
+        }
+    }
+
+    private UserDTO getLoggedUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) return null;
+        UserDTO u = (UserDTO) session.getAttribute("user");
+        return (u != null && u.getPrivileges() > 0) ? u : null;
     }
 
     private void handleList(HttpServletRequest request, HttpServletResponse response)

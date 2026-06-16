@@ -38,7 +38,9 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        if (userDAO.register(username, password)) {
+        String hashed = BCrypt.hashpw(password, BCrypt.gensalt(12));
+
+        if (userDAO.register(username, hashed)) {
             response.sendRedirect(request.getContextPath() + "/login.jsp?registered=1");
         } else {
             response.sendRedirect(request.getContextPath() + "/register.jsp?error=db");

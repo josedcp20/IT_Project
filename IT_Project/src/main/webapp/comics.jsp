@@ -1,11 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.HashSet" %>
 <%@ page import="pk.wieik.it_project.dto.ComicDTO" %>
+<%@ page import="pk.wieik.it_project.dto.SettingsDTO" %>
 <%@ page import="pk.wieik.it_project.dto.UserDTO" %>
+<%@ page import="pk.wieik.it_project.dao.SettingsDAO" %>
 <%
     UserDTO user = (UserDTO) session.getAttribute("user");
     boolean isAdmin = user != null && user.getPrivileges() == 2;
+    boolean isLogged = user != null && user.getPrivileges() > 0;
     List<ComicDTO> comics = (List<ComicDTO>) request.getAttribute("comics");
+
+    // Precarga el set de IDs favoritos del usuario actual para no consultar BD por cada fila
+    Set<Integer> favIds = new HashSet<>();
+    if (isLogged) {
+        for (SettingsDTO s : new SettingsDAO().getByUserId(user.getId())) {
+            favIds.add(s.getAge());
+        }
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -56,9 +69,7 @@
             </div>
 
             <% if (isAdmin) { %>
-                <p><a href="comics?action=editForm"
-                      style="display:inline-block;background:#10b981;color:white;padding:0.5rem 0.9rem;border-radius:6px;text-decoration:none;">
-                    + Add new comic</a></p>
+                <p><a href="comics?action=editForm" class="btn-success">+ Add new comic</a></p>
             <% } %>
 
             <table>
@@ -76,6 +87,15 @@
                         <td><%= c.getReleaseDate() %></td>
                         <td>
                             <a href="comics?action=detail&id=<%= c.getId() %>">View</a>
+                            <% if (isLogged) {
+                                boolean isFav = favIds.contains(c.getId());
+                            %>
+                                <form action="comics" method="post">
+                                    <input type="hidden" name="action" value="<%= isFav ? "removeFav" : "addFav" %>"/>
+                                    <input type="hidden" name="comicId" value="<%= c.getId() %>"/>
+                                    <input type="submit" value="<%= isFav ? "Unfavorite" : "Favorite" %>"/>
+                                </form>
+                            <% } %>
                             <% if (isAdmin) { %>
                                 <a href="comics?action=editForm&id=<%= c.getId() %>">Edit</a>
                                 <form style="display:inline" action="comics" method="post"
