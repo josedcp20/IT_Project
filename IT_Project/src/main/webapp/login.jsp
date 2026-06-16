@@ -15,6 +15,10 @@
 <body>
 <div id="container">
     <h2>Login</h2>
+    
+    <% if ("1".equals(request.getParameter("registered"))) { %>
+    <p style="color:green;">Account created. You can log in now.</p>
+    <% } %>
 
     <% String error = request.getParameter("error"); %>
     <% if ("1".equals(error)) { %>
@@ -31,6 +35,7 @@
         <input type="submit" value="Login">
     </form>
 
+    <p>Don't have an account? <a href="register.jsp">Register here</a>.</p>
     <p><a href="index.jsp?page=main">Back to main</a></p>
 </div>
 </body>

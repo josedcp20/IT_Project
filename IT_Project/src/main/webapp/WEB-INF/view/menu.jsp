@@ -9,6 +9,7 @@
     <li><a href="?page=main">Main page</a></li>
     <li><a href="?page=quadratic">ax<sup>2</sup>+bx+c=0</a></li>
     <li><a href="?page=third">Link3</a></li>
+    <li><a href="comics">Comics</a></li>
     <% if (privileges > 0) { %>
     <li><a href="?page=settings">Settings</a></li>
     <% } %>

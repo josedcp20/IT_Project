@@ -1,4 +1,4 @@
-package pk.wieik.it_project.controller;
+package pk.wieik.it_project.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

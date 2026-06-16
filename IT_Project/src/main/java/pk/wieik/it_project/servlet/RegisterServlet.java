@@ -9,22 +9,39 @@ import java.io.IOException;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-    private UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO = new UserDAO();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect(request.getContextPath() + "/register.jsp");
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String user = request.getParameter("username");
-        String pass = request.getParameter("password");
+        request.setCharacterEncoding("UTF-8");
 
-        // Cifrado BCrypt (Paso 11)
-        String hashed = BCrypt.hashpw(pass, BCrypt.gensalt(12));
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String confirm  = request.getParameter("confirm");
 
-        // Llamada al método register (asegúrate de tenerlo en UserDAO)
-        if (userDAO.register(user, hashed)) {
-            response.sendRedirect("login.jsp");
+        if (username == null || username.isBlank()
+                || password == null || password.isBlank()
+                || !password.equals(confirm)) {
+            response.sendRedirect(request.getContextPath() + "/register.jsp?error=invalid");
+            return;
+        }
+
+        if (userDAO.findByUsername(username) != null) {
+            response.sendRedirect(request.getContextPath() + "/register.jsp?error=exists");
+            return;
+        }
+
+        if (userDAO.register(username, password)) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp?registered=1");
         } else {
-            response.getWriter().println("Error al registrar el usuario.");
+            response.sendRedirect(request.getContextPath() + "/register.jsp?error=db");
         }
     }
 }

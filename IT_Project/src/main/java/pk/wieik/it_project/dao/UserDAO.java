@@ -158,20 +158,8 @@ public class UserDAO {
     }
 
     public boolean register(String username, String password) {
-        // La consulta SQL debe insertar el usuario, la contraseña (ya hasheada) y los privilegios (1 por defecto)
-        String sql = "INSERT INTO users (user, password, privileges) VALUES (?, ?, 1)";
-
-        try (Connection connection = DatabaseManager.connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            return ps.executeUpdate() == 1; // Devuelve true si se insertó una fila
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        UserDTO u = new UserDTO(username, password, 1);
+        return addUser(u);
     }
 
     /**
