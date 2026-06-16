@@ -6,12 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager {
-    // Ruta a la BD: dentro del directorio de trabajo (raíz del proyecto al lanzar desde IntelliJ)
     private static final String DB_PATH = "C:/Users/Llanos Pujante/Desktop/Uni/Erasmus/2 Cuatri/Internet Technologies/IT_Project/IT_Project/comics-db.db";
     private static final String URL = "jdbc:sqlite:" + DB_PATH;
 
-    // Bloque static: se ejecuta UNA sola vez, la primera vez que se carga la clase.
-    // Esto cumple con "Create relational database tables automatically" del PDF.
     static {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -21,23 +18,14 @@ public class DatabaseManager {
         createTables();
     }
 
-    /**
-     * Devuelve una conexión nueva a la BD.
-     * Cada llamada abre una conexión que el caller debe cerrar (try-with-resources).
-     * SQLite es un fichero, no un servidor, así que abrir/cerrar es barato.
-     */
     public static Connection connect() throws SQLException {
         Connection connection = DriverManager.getConnection(URL);
-        // SQLite tiene las FK desactivadas por defecto. Las activamos por conexión.
         try (Statement st = connection.createStatement()) {
             st.execute("PRAGMA foreign_keys = ON");
         }
         return connection;
     }
 
-    /**
-     * Crea las tres tablas si no existen. Idempotente.
-     */
     private static void createTables() {
         String usersTable =
                 "CREATE TABLE IF NOT EXISTS users (" +
@@ -47,8 +35,6 @@ public class DatabaseManager {
                         "  privileges INTEGER NOT NULL DEFAULT 1" +
                         ")";
 
-        // settings: reutilizada como "favoritos" del usuario.
-        // name = título, surname = serie/autor, age = id del cómic.
         String settingsTable =
                 "CREATE TABLE IF NOT EXISTS settings (" +
                         "  id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -79,7 +65,7 @@ public class DatabaseManager {
             statement.execute(settingsTable);
             statement.execute(comicsTable);
 
-            System.out.println("[DatabaseManager] DB lista en: " + DB_PATH);
+            System.out.println("[DatabaseManager] DB ready at: " + DB_PATH);
         } catch (SQLException e) {
             e.printStackTrace();
         }

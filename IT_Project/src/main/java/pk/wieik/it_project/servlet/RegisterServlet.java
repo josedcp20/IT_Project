@@ -1,14 +1,18 @@
 package pk.wieik.it_project.servlet;
 
-import pk.wieik.it_project.dao.UserDAO;
-import org.mindrot.jbcrypt.BCrypt;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
+import pk.wieik.it_project.dao.UserDAO;
+
 import java.io.IOException;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
+
     private final UserDAO userDAO = new UserDAO();
 
     @Override
@@ -17,6 +21,7 @@ public class RegisterServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/register.jsp");
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

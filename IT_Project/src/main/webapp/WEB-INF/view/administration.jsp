@@ -49,10 +49,9 @@
                 </td>
                 <td>
                     <% if (u.getId() != adminUser.getId()) { %>
-                        <%-- Form anidados no se pueden, así que el delete se hace fuera y se referencia por formaction --%>
                         <button type="submit" formaction="DG?action=deleteUser&userId=<%= u.getId() %>" formmethod="post"
                                 onclick="return confirm('Delete user &quot;<%= u.getUser() %>&quot; and all their favorites?');"
-                                style="background:#dc2626;">
+                                class="danger">
                             Delete
                         </button>
                     <% } %>

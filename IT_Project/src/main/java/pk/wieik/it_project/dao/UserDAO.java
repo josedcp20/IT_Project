@@ -12,11 +12,6 @@ import java.util.List;
 
 public class UserDAO {
 
-    /**
-     * Inserta un usuario nuevo en la BD.
-     * Devuelve true si se insertó correctamente.
-     * Falla (devuelve false) si el nombre de usuario ya existe (columna UNIQUE).
-     */
     public boolean addUser(UserDTO user) {
         String sql = "INSERT INTO users(user, password, privileges) VALUES (?, ?, ?)";
 
@@ -34,11 +29,6 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Valida credenciales. Devuelve true si el usuario existe Y la contraseña coincide
-     * Y NO está bloqueado (privileges > 0).
-     * El método mínimo que pide el PDF.
-     */
     public boolean validateUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE user = ? AND password = ? AND privileges > 0";
 
@@ -57,10 +47,6 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Busca un usuario por su nombre de login. Devuelve null si no existe.
-     * Lo necesitamos en el login para guardar el UserDTO completo en sesión.
-     */
     public UserDTO findByUsername(String username) {
         String sql = "SELECT id, user, password, privileges FROM users WHERE user = ?";
 
@@ -80,9 +66,6 @@ public class UserDAO {
         return null;
     }
 
-    /**
-     * Lista todos los usuarios. Necesario para el panel de administración.
-     */
     public List<UserDTO> getAllUsers() {
         String sql = "SELECT id, user, password, privileges FROM users ORDER BY id";
         List<UserDTO> users = new ArrayList<>();
@@ -100,10 +83,6 @@ public class UserDAO {
         return users;
     }
 
-    /**
-     * Cambia los privilegios de un usuario.
-     * 0 = bloqueado, 1 = usuario normal, 2 = admin.
-     */
     public boolean updatePrivileges(int userId, int privileges) {
         String sql = "UPDATE users SET privileges = ? WHERE id = ?";
 
@@ -120,10 +99,6 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Borra un usuario. Por el ON DELETE CASCADE en `settings`,
-     * sus favoritos se borran automáticamente.
-     */
     public boolean deleteUser(int userId) {
         String sql = "DELETE FROM users WHERE id = ?";
 
@@ -138,10 +113,6 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Cuenta cuántos usuarios hay. Lo usaremos en UserInitializer
-     * para insertar el admin/user iniciales SOLO si la BD está vacía.
-     */
     public int countUsers() {
         String sql = "SELECT COUNT(*) FROM users";
 
@@ -163,10 +134,6 @@ public class UserDAO {
         return addUser(u);
     }
 
-    /**
-     * Devuelve el hash BCrypt almacenado para un usuario activo (privileges > 0).
-     * Devuelve null si no existe o está bloqueado.
-     */
     public String getHashedPassword(String username) {
         String sql = "SELECT password FROM users WHERE user = ? AND privileges > 0";
         try (Connection conn = DatabaseManager.connect();
@@ -181,9 +148,6 @@ public class UserDAO {
         return null;
     }
 
-    /**
-     * Helper privado: convierte una fila del ResultSet en un UserDTO.
-     */
     private UserDTO mapRow(ResultSet rs) throws SQLException {
         return new UserDTO(
                 rs.getInt("id"),

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComicDAO {
-    // ---------- CRUD ----------
 
     public boolean addComic(ComicDTO comic) {
         String sql = "INSERT INTO comics(title, series, cartoonist, writer, publisher, release_date, description) " +
@@ -88,13 +87,6 @@ public class ComicDAO {
         return null;
     }
 
-    // ---------- Browse + filtro ----------
-
-    /**
-     * Devuelve todos los cómics ordenados por un criterio.
-     * sortBy admite: "title", "release_date", "date_added".
-     * Otros valores -> ordena por id.
-     */
     public List<ComicDTO> getAll(String sortBy) {
         String column = switch (sortBy == null ? "" : sortBy) {
             case "title" -> "title";
@@ -116,12 +108,6 @@ public class ComicDAO {
         return list;
     }
 
-    // ---------- Búsqueda con varios parámetros ----------
-
-    /**
-     * Búsqueda flexible: cualquiera de los parámetros puede ser null/vacío
-     * y se ignora. Hace LIKE con comodines para coincidencias parciales.
-     */
     public List<ComicDTO> search(String title, String series, String cartoonist, String publisher) {
         StringBuilder sql = new StringBuilder("SELECT * FROM comics WHERE 1=1");
         List<String> params = new ArrayList<>();
@@ -160,8 +146,6 @@ public class ComicDAO {
         }
         return list;
     }
-
-    // ---------- helper ----------
 
     private ComicDTO mapRow(ResultSet rs) throws SQLException {
         ComicDTO c = new ComicDTO();

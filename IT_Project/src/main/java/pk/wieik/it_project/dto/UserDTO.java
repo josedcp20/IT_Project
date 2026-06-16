@@ -39,6 +39,5 @@ public class UserDTO {
         return "UserDTO{id=" + id +
                 ", user='" + user + '\'' +
                 ", privileges=" + privileges + '}';
-        // Nota: no exponemos password en toString por seguridad
     }
 }

@@ -1,13 +1,5 @@
 package pk.wieik.it_project.dto;
-/**
- * Representa una fila de la tabla `settings`.
- * En el dominio del proyecto (cómics), se reutiliza como entrada de favoritos:
- *   - name    : título del cómic favorito (snapshot)
- *   - surname : serie o cartoonist (snapshot)
- *   - age     : id del cómic referenciado en la tabla `comics`
- *
- * Los nombres de los campos se mantienen tal y como pide el PDF.
- */
+
 public class SettingsDTO {
     private int id;
     private int userId;

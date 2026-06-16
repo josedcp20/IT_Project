@@ -1,18 +1,14 @@
 package pk.wieik.it_project.dto;
 
-/**
- * Representa una fila de la tabla `comics`.
- * Tabla añadida por nosotros para cubrir el dominio del proyecto.
- */
 public class ComicDTO {
     private int id;
     private String title;
     private String series;
-    private String cartoonist;   // autor del dibujo
-    private String writer;       // guionista
+    private String cartoonist;
+    private String writer;
     private String publisher;
-    private String releaseDate;  // formato ISO YYYY-MM-DD
-    private String dateAdded;    // formato ISO YYYY-MM-DD
+    private String releaseDate;
+    private String dateAdded;
     private String description;
 
     public ComicDTO() {

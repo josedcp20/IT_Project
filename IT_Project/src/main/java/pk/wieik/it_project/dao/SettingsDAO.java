@@ -9,11 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 public class SettingsDAO {
-    /**
-     * Añade una entrada de favoritos. Método mínimo del PDF.
-     * En nuestro dominio: marca un cómic como favorito para un usuario.
-     */
+
     public boolean addSettings(SettingsDTO settings) {
         String sql = "INSERT INTO settings(user_id, name, surname, age) VALUES (?, ?, ?, ?)";
 
@@ -32,9 +30,6 @@ public class SettingsDAO {
         }
     }
 
-    /**
-     * Lista los favoritos de un usuario concreto.
-     */
     public List<SettingsDTO> getByUserId(int userId) {
         String sql = "SELECT id, user_id, name, surname, age FROM settings WHERE user_id = ?";
         List<SettingsDTO> list = new ArrayList<>();
@@ -54,10 +49,6 @@ public class SettingsDAO {
         return list;
     }
 
-    /**
-     * Comprueba si un usuario ya tiene un cómic concreto como favorito.
-     * Útil para evitar duplicados en la UI.
-     */
     public boolean isFavorite(int userId, int comicId) {
         String sql = "SELECT 1 FROM settings WHERE user_id = ? AND age = ?";
 
@@ -75,9 +66,6 @@ public class SettingsDAO {
         }
     }
 
-    /**
-     * Elimina un favorito concreto (por usuario + id del cómic).
-     */
     public boolean removeFavorite(int userId, int comicId) {
         String sql = "DELETE FROM settings WHERE user_id = ? AND age = ?";
 

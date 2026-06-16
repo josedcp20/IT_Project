@@ -8,11 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import pk.wieik.it_project.dao.UserDAO;
 import pk.wieik.it_project.dto.UserDTO;
-import pk.wieik.it_project.model.Tools;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Random;
 import java.util.List;
 
 @WebServlet(name = "DG", value = "/DG")
@@ -20,10 +17,9 @@ public class DG extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                response.sendRedirect(request.getContextPath() + "/index.jsp?page=main");
+        response.sendRedirect(request.getContextPath() + "/index.jsp?page=main");
     }
 
     @Override
@@ -56,7 +52,6 @@ public class DG extends HttpServlet {
             if (user != null && user.getPrivileges() == 2) {
                 try {
                     int targetId = Integer.parseInt(request.getParameter("userId"));
-                    // Evita que el admin se borre a sí mismo
                     if (targetId != user.getId()) {
                         userDAO.deleteUser(targetId);
                     }

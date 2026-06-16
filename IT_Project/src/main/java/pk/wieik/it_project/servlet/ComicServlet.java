@@ -1,16 +1,23 @@
 package pk.wieik.it_project.servlet;
 
-import pk.wieik.it_project.dto.*;
-import pk.wieik.it_project.dao.*;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import pk.wieik.it_project.dao.ComicDAO;
+import pk.wieik.it_project.dao.SettingsDAO;
+import pk.wieik.it_project.dto.ComicDTO;
+import pk.wieik.it_project.dto.SettingsDTO;
+import pk.wieik.it_project.dto.UserDTO;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/comics")
 public class ComicServlet extends HttpServlet {
+
     private final ComicDAO comicDAO = new ComicDAO();
     private final SettingsDAO settingsDAO = new SettingsDAO();
 
@@ -38,7 +45,6 @@ public class ComicServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null) action = "";
 
-        // Acciones de favoritos: requieren login (no necesariamente admin)
         if ("addFav".equals(action) || "removeFav".equals(action)) {
             UserDTO loggedUser = getLoggedUser(request);
             if (loggedUser == null) {
@@ -50,7 +56,6 @@ public class ComicServlet extends HttpServlet {
             return;
         }
 
-        // Resto de acciones: solo admin
         if (!isAdmin(request)) {
             response.sendRedirect(request.getContextPath() + "/comics");
             return;
@@ -191,5 +196,4 @@ public class ComicServlet extends HttpServlet {
     private int parseInt(String s, int def) {
         try { return Integer.parseInt(s); } catch (Exception e) { return def; }
     }
-
 }

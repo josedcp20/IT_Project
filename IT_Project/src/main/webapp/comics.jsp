@@ -12,7 +12,6 @@
     boolean isLogged = user != null && user.getPrivileges() > 0;
     List<ComicDTO> comics = (List<ComicDTO>) request.getAttribute("comics");
 
-    // Precarga el set de IDs favoritos del usuario actual para no consultar BD por cada fila
     Set<Integer> favIds = new HashSet<>();
     if (isLogged) {
         for (SettingsDTO s : new SettingsDAO().getByUserId(user.getId())) {
