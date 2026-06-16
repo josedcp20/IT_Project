@@ -1,15 +1,17 @@
-<%@ page import="pk.wieik.it_project.model.*" %>
+<%@ page import="pk.wieik.it_project.model.Tools" %>
+<%@ page import="pk.wieik.it_project.dto.UserDTO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<jsp:useBean id="user" class="pk.wieik.it_project.model.DGuser" scope="session"/>
 <%
+    UserDTO user = (UserDTO) session.getAttribute("user");
+    int privileges = (user != null) ? user.getPrivileges() : -1;
+
     String Page = request.getParameter("page");
     String Subpages = "main;quadratic;third";
-    if(user.getPrivileges() > 0) Subpages +=";settings";
-    if(user.getPrivileges() == 2) Subpages +=";administration";
+    if (privileges > 0) Subpages += ";settings";
+    if (privileges == 2) Subpages += ";administration";
     Page = Tools.parsePage(Page, Subpages);
 %>
-
 
 <!DOCTYPE html>
 <html style="background-color: ${(empty applicationScope.backgroundColor) ?

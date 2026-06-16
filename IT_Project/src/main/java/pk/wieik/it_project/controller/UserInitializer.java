@@ -1,25 +1,51 @@
 package pk.wieik.it_project.controller;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import pk.wieik.it_project.model.DGuser;
+import pk.wieik.it_project.dao.*;
+import pk.wieik.it_project.dto.*;
+import pk.wieik.it_project.database.DatabaseManager;
 
-import java.util.HashMap;
 
 @WebListener
 public class UserInitializer  implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce){
-        ServletContext context = sce.getServletContext();
+        // Fuerza la carga de DatabaseManager => crea las tablas si no existen
+        try {
+            Class.forName(DatabaseManager.class.getName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        HashMap<String, DGuser> users = new HashMap<>();
-        users.put("user1", new DGuser("user1", "user1", 1));
-        users.put("user2", new DGuser ("user2", "user2", 1));
-        users.put("user3", new DGuser ("user3", "user3", 2));
-        users.put("admin", new DGuser ("admin", "admin", 2));
-        context.setAttribute("users", users);
+        UserDAO userDAO = new UserDAO();
+
+        // Solo inserta usuarios de prueba si la BD está vacía
+        if (userDAO.countUsers() == 0) {
+            userDAO.addUser(new UserDTO("user1", "user1", 1));
+            userDAO.addUser(new UserDTO("user2", "user2", 1));
+            userDAO.addUser(new UserDTO("admin", "admin", 2));
+            System.out.println("[UserInitializer] Initial users inserted correctly.");
+        }
+
+        // Cómics de ejemplo (opcional, para poder probar la UI desde el principio)
+        ComicDAO comicDAO = new ComicDAO();
+        if (comicDAO.getAll("id").isEmpty()) {
+            comicDAO.addComic(new ComicDTO(
+                    "Watchmen", "Watchmen", "Dave Gibbons", "Alan Moore",
+                    "DC Comics", "1986-09-01",
+                    "A deconstruction of the superhero genre."));
+            comicDAO.addComic(new ComicDTO(
+                    "Maus", "Maus", "Art Spiegelman", "Art Spiegelman",
+                    "Pantheon Books", "1986-08-12",
+                    "A graphic novel about the Holocaust."));
+            comicDAO.addComic(new ComicDTO(
+                    "The Dark Knight Returns", "Batman", "Frank Miller", "Frank Miller",
+                    "DC Comics", "1986-02-01",
+                    "An aged Batman returns to fight crime in a dystopian Gotham."));
+            System.out.println("[UserInitializer] Example comics inserted");
+        }
     }
 
     @Override

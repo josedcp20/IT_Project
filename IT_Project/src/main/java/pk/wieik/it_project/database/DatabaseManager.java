@@ -7,12 +7,17 @@ import java.sql.Statement;
 
 public class DatabaseManager {
     // Ruta a la BD: dentro del directorio de trabajo (raíz del proyecto al lanzar desde IntelliJ)
-    private static final String DB_PATH = System.getProperty("user.dir") + "/comics-db.db";
+    private static final String DB_PATH = "C:/Users/Llanos Pujante/Desktop/Uni/Erasmus/2 Cuatri/Internet Technologies/IT_Project/IT_Project/comics-db.db";
     private static final String URL = "jdbc:sqlite:" + DB_PATH;
 
     // Bloque static: se ejecuta UNA sola vez, la primera vez que se carga la clase.
     // Esto cumple con "Create relational database tables automatically" del PDF.
     static {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         createTables();
     }
 
