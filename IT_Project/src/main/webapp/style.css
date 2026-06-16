@@ -1,253 +1,110 @@
 @charset "UTF-8";
 
-/* ---------- Reset & base ---------- */
-*, *::before, *::after { box-sizing: border-box; }
-
-html, body {
-    margin: 0;
-    padding: 0;
-    background: #f4f6fa;
-    color: #1f2937;
-    font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
+/* Paleta estilo Comic Moderno */
+:root {
+    --primary: #d32f2f;      /* Rojo Marvel (Acción) */
+    --secondary: #1976d2;    /* Azul clásico (Confianza) */
+    --accent: #ffeb3b;       /* Amarillo cómic (Acentos) */
+    --bg: #fdfaf6;           /* Blanco crema (Papel envejecido) */
+    --text: #212121;         /* Negro tinta */
+    --shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-a { color: #2563eb; text-decoration: none; }
-a:hover { text-decoration: underline; }
+body {
+    font-family: 'Comic Neue', 'Segoe UI', sans-serif; /* Tipografía cercana al cómic pero legible */
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+}
 
-h1, h2, h3 { color: #111827; font-weight: 600; }
-h1 { font-size: 1.6rem; margin: 0 0 0.8rem; }
-h2 { font-size: 1.3rem; margin: 0.4rem 0 0.6rem; }
-h3 { font-size: 1.05rem; margin: 1rem 0 0.5rem; color: #374151; }
-
-/* ---------- Layout ---------- */
 #container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 1rem 2rem;
 }
 
+/* Header impactante */
 #header {
-    background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
+    background: var(--primary);
     color: white;
-    padding: 1.4rem 1.6rem;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-#header h1 {
-    color: white;
-    margin: 0;
-    font-size: 1.5rem;
-    letter-spacing: 0.5px;
-}
-#header .subtitle {
-    font-size: 0.85rem;
-    opacity: 0.85;
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 4px solid #b71c1c; /* Borde estilo viñeta */
 }
 
-#middle {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 1.5rem;
+/* Tarjetas (Menú y Contenido) */
+#menu, #content {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    border: 2px solid #e0e0e0;
 }
 
 #menu {
-    background: white;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    height: fit-content;
-}
-
-#menu ul { list-style: none; margin: 0; padding: 0; }
-#menu li { margin: 0.25rem 0; }
-
-#menu a {
-    display: block;
-    padding: 0.55rem 0.8rem;
-    border-radius: 6px;
-    color: #374151;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.15s, color 0.15s;
-}
-#menu a:hover {
-    background: #eff6ff;
-    color: #1d4ed8;
-    text-decoration: none;
-}
-
-#news {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e5e7eb;
-    font-size: 0.9rem;
-}
-#news form { display: flex; flex-direction: column; gap: 0.4rem; }
-#news input[type="text"],
-#news input[type="password"] {
-    width: 100%;
+    float: left;
+    width: 200px;
 }
 
 #content {
-    background: white;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-left: 240px;
     min-height: 400px;
 }
 
-#footer {
-    margin-top: 2rem;
-    padding: 1rem;
-    text-align: center;
-    color: #6b7280;
-    font-size: 0.85rem;
-    border-top: 1px solid #e5e7eb;
+/* Enlaces del Menú */
+#menu a {
+    display: block;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: bold;
+    border-radius: 12px;
+    transition: all 0.3s;
+    border-left: 5px solid transparent;
 }
 
-/* ---------- Forms & inputs ---------- */
-input[type="text"],
-input[type="password"],
-input[type="number"],
-input[type="email"],
-select,
-textarea {
-    padding: 0.5rem 0.7rem;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 0.92rem;
-    font-family: inherit;
-    background: white;
-    transition: border-color 0.15s, box-shadow 0.15s;
+#menu a:hover {
+    background: #fff9c4; /* Amarillo suave al pasar */
+    border-left: 5px solid var(--accent);
+    color: var(--secondary);
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-input[type="submit"],
-button {
-    background: #2563eb;
+/* Botones estilo viñeta */
+button, .btn {
+    background: var(--secondary);
     color: white;
+    padding: 10px 20px;
     border: none;
-    padding: 0.55rem 1.1rem;
-    border-radius: 6px;
-    font-size: 0.92rem;
-    font-weight: 500;
+    border-radius: 12px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background 0.15s;
-    font-family: inherit;
+    box-shadow: 0 4px 0 #1565c0; /* Efecto 3D ligero */
+    transition: transform 0.1s;
 }
 
-input[type="submit"]:hover,
-button:hover {
-    background: #1d4ed8;
+button:active {
+    transform: translateY(2px);
+    box-shadow: none;
 }
 
-/* Botón secundario para delete */
-input[type="submit"][value="Delete"] {
-    background: #dc2626;
-}
-input[type="submit"][value="Delete"]:hover {
-    background: #b91c1c;
-}
-
-label {
-    display: inline-block;
-    margin-bottom: 0.2rem;
-    font-weight: 500;
-    color: #374151;
-    font-size: 0.9rem;
-}
-
-form p, form > div { margin-bottom: 0.6rem; }
-
-/* ---------- Tables ---------- */
+/* Tablas unificadas */
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin: 1rem 0;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-table th, table td {
-    padding: 0.65rem 0.85rem;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+th {
+    background: #f5f5f5;
+    padding: 15px;
+    border-bottom: 3px solid var(--primary);
 }
 
-table th {
-    background: #f9fafb;
-    font-weight: 600;
-    color: #374151;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-}
-
-table tr:last-child td { border-bottom: none; }
-table tr:hover td { background: #f9fafb; }
-
-/* Acciones en celdas */
-table td a {
-    margin-right: 0.4rem;
-    font-size: 0.88rem;
-}
-
-/* ---------- Cards (filter/search blocks) ---------- */
-.card {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 1rem 1.2rem;
-    margin: 1rem 0;
-}
-
-/* ---------- Alerts ---------- */
-.alert {
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    margin: 0.8rem 0;
-    font-size: 0.92rem;
-}
-.alert-error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-.alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-.alert-info    { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
-
-/* ---------- Login/Register stand-alone pages ---------- */
-.auth-box {
-    max-width: 380px;
-    margin: 4rem auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-.auth-box h2 { text-align: center; margin-bottom: 1.2rem; }
-.auth-box form { display: flex; flex-direction: column; gap: 0.7rem; }
-.auth-box input[type="submit"] { margin-top: 0.5rem; }
-.auth-box p { text-align: center; font-size: 0.9rem; }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-    #middle {
-        grid-template-columns: 1fr;
-    }
-    #menu { width: 100%; }
+td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
 }
