@@ -174,6 +174,24 @@ public class UserDAO {
         }
     }
 
+    public String getHashedPassword(String username) {
+        String sql = "SELECT password FROM users WHERE user = ?";
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("password");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Devuelve null si el usuario no existe o hay error
+    }
+
     /**
      * Helper privado: convierte una fila del ResultSet en un UserDTO.
      * Evita duplicar código en findByUsername / getAllUsers.
